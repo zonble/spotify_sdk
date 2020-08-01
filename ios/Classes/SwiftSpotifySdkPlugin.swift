@@ -1,5 +1,6 @@
 import Flutter
 import UIKit
+import SpotifyiOS
 
 public class SwiftSpotifySdkPlugin: NSObject, FlutterPlugin {
     
