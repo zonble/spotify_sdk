@@ -25,16 +25,19 @@ class SpotifySdk {
   // method channel
   static const MethodChannel _channel =
       MethodChannel(MethodChannels.spotifySdk);
+
   //player event channels
   static const EventChannel _playerContextChannel =
       EventChannel(EventChannels.playerContext);
   static const EventChannel _playerStateChannel =
       EventChannel(EventChannels.playerState);
+
   // user event channels
   static const EventChannel _userStatusChannel =
       EventChannel(EventChannels.userStatus);
   static const EventChannel _capabilitiesChannel =
       EventChannel(EventChannels.capabilities);
+
   // connection status channel
   static const EventChannel _connectionStatusChannel =
       EventChannel(EventChannels.connectionStatus);
@@ -54,13 +57,15 @@ class SpotifySdk {
       {@required String clientId,
       @required String redirectUrl,
       String playerName = 'Spotify SDK',
-      String accessToken}) async {
+      String accessToken,
+      List<String> scopes}) async {
     try {
       return await _channel.invokeMethod(MethodNames.connectToSpotify, {
         ParamNames.clientId: clientId,
         ParamNames.redirectUrl: redirectUrl,
         ParamNames.playerName: playerName,
-        ParamNames.accessToken: accessToken
+        ParamNames.accessToken: accessToken,
+        ParamNames.scope: scopes ?? [],
       });
     } on Exception catch (e) {
       _logException(MethodNames.connectToSpotify, e);

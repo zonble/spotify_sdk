@@ -1,4 +1,5 @@
 import SpotifyiOS
+import Flutter
 
 class ConnectionStatusHandler: StatusHandler, SPTAppRemoteDelegate {
 

@@ -1,4 +1,5 @@
 import SpotifyiOS
+import Flutter
 
 class PlayerStateHandler: StatusHandler {
     private let appRemote: SPTAppRemote
