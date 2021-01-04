@@ -67,6 +67,10 @@ public class SwiftSpotifySdkPlugin: NSObject, FlutterPlugin {
                     result(FlutterError(code: "Arguments Error", message: "One or more arguments are missing", details: nil))
                     return
             }
+            if let appRemote = appRemote, let accessToken = appRemote.connectionParameters.accessToken {
+                result(accessToken)
+                return
+            }
             connectionStatusHandler?.tokenResult = result
             do {
                 try connectToSpotify(clientId: clientID, redirectURL: url)
