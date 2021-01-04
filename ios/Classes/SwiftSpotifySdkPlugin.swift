@@ -262,9 +262,12 @@ public class SwiftSpotifySdkPlugin: NSObject, FlutterPlugin {
     private func connectToSpotify(clientId: String, redirectURL: String, accessToken: String? = nil, scope: [String] = []) throws {
         enum SpotifyError: Error {
             case spotifyNotInstalledError
+            case spotifyMissingRedirectURLError
         }
 
-        guard let redirectURL = URL(string: redirectURL) else { return }
+        guard let redirectURL = URL(string: redirectURL) else {
+            throw SpotifyError.spotifyMissingRedirectURLError
+        }
         let configuration = SPTConfiguration(clientID: clientId, redirectURL: redirectURL)
         let appRemote = SPTAppRemote(configuration: configuration, logLevel: .none)
         appRemote.delegate = connectionStatusHandler
