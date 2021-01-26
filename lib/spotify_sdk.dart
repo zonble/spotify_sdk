@@ -66,7 +66,7 @@ class SpotifySdk {
         ParamNames.playerName: playerName,
         ParamNames.accessToken: accessToken,
         ParamNames.scope: scopes ?? [],
-      });
+      }).timeout(const Duration(seconds: 8));
     } on Exception catch (e) {
       _logException(MethodNames.connectToSpotify, e);
       rethrow;
