@@ -67,6 +67,10 @@ public class SwiftSpotifySdkPlugin: NSObject, FlutterPlugin {
                     result(FlutterError(code: "Arguments Error", message: "One or more arguments are missing", details: nil))
                     return
             }
+            if let appRemote = appRemote, let accessToken = appRemote.connectionParameters.accessToken {
+                result(accessToken)
+                return
+            }
             connectionStatusHandler?.tokenResult = result
             do {
                 try connectToSpotify(clientId: clientID, redirectURL: url)
@@ -160,7 +164,7 @@ public class SwiftSpotifySdkPlugin: NSObject, FlutterPlugin {
                 result(FlutterError(code: "Connection Error", message: "AppRemote is null", details: nil))
                 return
             }
-            appRemote.playerAPI?.skip(toNext: { (spotifyResult, error) in
+            appRemote.playerAPI?.skip(toPrevious: { (spotifyResult, error) in
                 if let error = error {
                     result(FlutterError(code: "PlayerAPI Error", message: error.localizedDescription, details: nil))
                     return
@@ -258,9 +262,12 @@ public class SwiftSpotifySdkPlugin: NSObject, FlutterPlugin {
     private func connectToSpotify(clientId: String, redirectURL: String, accessToken: String? = nil, scope: [String] = []) throws {
         enum SpotifyError: Error {
             case spotifyNotInstalledError
+            case spotifyMissingRedirectURLError
         }
 
-        guard let redirectURL = URL(string: redirectURL) else { return }
+        guard let redirectURL = URL(string: redirectURL) else {
+            throw SpotifyError.spotifyMissingRedirectURLError
+        }
         let configuration = SPTConfiguration(clientID: clientId, redirectURL: redirectURL)
         let appRemote = SPTAppRemote(configuration: configuration, logLevel: .none)
         appRemote.delegate = connectionStatusHandler
